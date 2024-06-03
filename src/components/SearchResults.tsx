@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {Button, Flex, Spinner} from '@sanity/ui'
 import {useRef} from 'react'
 import styled from 'styled-components'
@@ -51,6 +50,7 @@ const SearchResults = ({results, loading, onSelect, selectedEpisode}: ISearchRes
       )}
       {!loading && results && (
         <Flex
+          direction="column"
           align="flex-start"
           justify="flex-start"
           style={{width: '100%', height: '100%', position: 'absolute'}}

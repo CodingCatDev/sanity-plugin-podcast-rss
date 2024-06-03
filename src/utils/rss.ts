@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {parseStringPromise} from 'xml2js'
 
 import {Podcast} from '../index'
@@ -13,10 +12,6 @@ export async function fetchRssToJson(podcast: Podcast | undefined): Promise<Epis
     const response = await fetch(podcast.url)
     const xmlData = await response.text()
     const jsonData: RSSObject = await parseStringPromise(xmlData)
-
-    //This is Gross lets make it better!
-
-    console.log('jsonData', jsonData)
 
     const episodes: Episode[] =
       jsonData?.rss?.channel?.at(0)?.item.map((item) => {

@@ -1,5 +1,15 @@
-/* eslint-disable no-console */
-import {Button, Card, Flex, Menu, MenuButton, MenuItem, Select, Stack, Text} from '@sanity/ui'
+import {
+  Avatar,
+  Button,
+  Card,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  Select,
+  Stack,
+  Text,
+} from '@sanity/ui'
 import {useCallback, useState} from 'react'
 import {set, setIfMissing, unset} from 'sanity'
 
@@ -21,19 +31,10 @@ const EpisodePicker = (params: EpisodePickerParams) => {
   const {query, loading, results, setQuery} = useQuery(selectedPodcast)
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | undefined>(defaultEpisode)
 
-  // eslint-disable-next-line no-console
-  console.log('episode picker', params)
-  // eslint-disable-next-line no-console
-  console.log('podcasts', podcasts)
-
-  // eslint-disable-next-line no-console
-  console.log('stuff', loading, results)
-
   const onClose = useCallback(() => setOpen(false), [])
   const onOpen = useCallback(() => setOpen(true), [])
   const onQueryChange: SearchBarOnChange = (e) => {
     const searchQuery = e.target.value
-    console.log('search query', searchQuery)
     setQuery(searchQuery)
   }
 
@@ -71,59 +72,74 @@ const EpisodePicker = (params: EpisodePickerParams) => {
 
   return (
     <Card>
-      <Stack padding={4} space={[3, 3, 4, 5]}>
-        <Select
-          fontSize={[2, 2, 3, 4]}
-          padding={[3, 3, 4]}
-          space={[3, 3, 4]}
-          // eslint-disable-next-line react/jsx-no-bind
-          onChange={(e) =>
-            setSelectedPodcast(podcasts.find((p) => p.url === (e.target as HTMLInputElement).value))
-          }
-        >
-          {podcasts.map((podcast) => (
-            <option key={podcast.title} value={podcast.url} selected={podcast === selectedPodcast}>
-              {podcast.title}
-            </option>
-          ))}
-        </Select>
-        <Button onClick={onOpen} mode="ghost" text="Search for Episodes" />
+      <Stack padding={2} space={[3, 3, 4, 5]}>
         {selectedEpisode && (
           <Card padding={[3, 3, 4]} radius={2} shadow={1}>
-            <Text align="center" size={[2, 2, 3]}>
-              <Flex align="flex-start" justify="space-between">
+            <Flex align="center" justify="space-between">
+              <Avatar
+                alt={selectedEpisode.title}
+                src={selectedEpisode.itunes.image.href}
+                size={2}
+              />
+
+              <Text size={[2, 2, 3]}>
                 <a href={selectedEpisode.link} target="_blank" rel="noopener noreferrer">
                   {selectedEpisode.title}
                 </a>
-                <MenuButton
-                  button={<Button text="..." mode="ghost" />}
-                  id="podcast-rss-menu-button"
-                  menu={
-                    <Menu>
-                      <MenuItem
-                        text="Delete"
-                        // eslint-disable-next-line react/jsx-no-bind
-                        onClick={handleMenuClick}
-                      />
-                    </Menu>
-                  }
-                  popover={{portal: true, placement: 'bottom-start'}}
-                />
-              </Flex>
-            </Text>
+              </Text>
+
+              <MenuButton
+                button={<Button text="..." mode="ghost" />}
+                id="podcast-rss-menu-button"
+                menu={
+                  <Menu>
+                    <MenuItem
+                      text="Delete"
+                      // eslint-disable-next-line react/jsx-no-bind
+                      onClick={handleMenuClick}
+                    />
+                  </Menu>
+                }
+                popover={{portal: true, placement: 'bottom-start'}}
+              />
+            </Flex>
           </Card>
         )}
+        <Button onClick={onOpen} mode="ghost" text="Search for Episodes" />
         <Popup
           // eslint-disable-next-line react/jsx-no-bind
           onClose={onClose}
           isOpen={isPopupOpen}
         >
-          <SearchBar
-            value={query}
-            // eslint-disable-next-line react/jsx-no-bind
-            onChange={onQueryChange}
-          />
-          <SearchResults {...searchResultsProps} />
+          <Stack padding={4} space={[3, 3, 4, 5]}>
+            <Select
+              fontSize={[2, 2, 3, 4]}
+              padding={[3, 3, 4]}
+              space={[3, 3, 4]}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={(e) =>
+                setSelectedPodcast(
+                  podcasts.find((p) => p.url === (e.target as HTMLInputElement).value),
+                )
+              }
+            >
+              {podcasts.map((podcast) => (
+                <option
+                  key={podcast.title}
+                  value={podcast.url}
+                  selected={podcast === selectedPodcast}
+                >
+                  {podcast.title}
+                </option>
+              ))}
+            </Select>
+            <SearchBar
+              value={query}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={onQueryChange}
+            />
+            <SearchResults {...searchResultsProps} />
+          </Stack>
         </Popup>
       </Stack>
     </Card>
