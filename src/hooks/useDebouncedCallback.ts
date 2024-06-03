@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-export default function useDebouncedCallback<A extends any[]>(
+export default function useDebouncedCallback<A extends unknown[]>(
   callback: (...args: A) => void,
   delay: number,
 ): (...args: A) => void {
