@@ -8,7 +8,7 @@ export interface Episode {
     id: string
     isPermaLink: boolean
   }
-  pubDate: Date
+  pubDate: string
   enclosures: {
     url: string
     length: number
