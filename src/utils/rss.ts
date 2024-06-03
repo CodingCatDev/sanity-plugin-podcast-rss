@@ -19,12 +19,14 @@ export async function fetchRssToJson(podcast: Podcast | undefined): Promise<Epis
           title: item?.title[0] || '',
           description: item?.description[0] || '',
           link: item?.link[0] || '',
-          pubDate: item?.pubDate[0] ? new Date(item?.pubDate[0]) : new Date(),
+          pubDate: item?.pubDate[0]
+            ? new Date(item?.pubDate[0]).toISOString()
+            : new Date().toISOString(),
           guid: {
             id: item?.guid[0]?._ || '',
             isPermaLink: item?.guid[0]?.$.isPermaLink === 'true' || false,
           },
-          enclosures: item?.enclosure.map((enclosure) => {
+          enclosures: item?.enclosure?.map((enclosure) => {
             return {
               url: enclosure?.$.url || '',
               length: enclosure?.$.length ? Number(enclosure?.$.length) : 0,
